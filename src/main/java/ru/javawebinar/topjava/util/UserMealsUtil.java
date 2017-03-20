@@ -39,13 +39,12 @@ public class UserMealsUtil {
         HashMap<LocalDate, Integer> meargetMap = new HashMap<LocalDate, Integer>();
 
 
+
         for (UserMeal list : mealList) {
             meargetMap.merge(list.getDateTime().toLocalDate(), Integer.valueOf(list.getCalories()), Integer::sum);
         }
 
-        ArrayList<UserMealWithExceed> result = new ArrayList<>();
-
-        result = mealList.stream()
+        ArrayList<UserMealWithExceed> result = mealList.stream()
                 .filter(val -> TimeUtil.isBetween(val.getDateTime().toLocalTime(), startTime, endTime))
                 .map(list -> new UserMealWithExceed(list.getDateTime(),
                                                         list.getDescription(),
