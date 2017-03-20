@@ -42,13 +42,12 @@ public class UserMealsUtil {
             meargetMap.merge(list.getDateTime().toLocalDate(), list.getCalories(), Integer::sum);
         }
 
-        List<UserMealWithExceed> result = mealList.stream()
+        return mealList.stream()
                 .filter(val -> TimeUtil.isBetween(val.getDateTime().toLocalTime(), startTime, endTime))
                 .map(list -> new UserMealWithExceed(list.getDateTime(),
                                                         list.getDescription(),
                                                         list.getCalories(),
                                                         meargetMap.get(list.getDateTime().toLocalDate()) > caloriesPerDay))
                 .collect(Collectors.toCollection(ArrayList::new));
-        return result;
     }
 }
