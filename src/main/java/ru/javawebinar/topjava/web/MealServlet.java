@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -20,8 +22,7 @@ public class MealServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         LOG.debug("MealServlet doGet");
-        req.setAttribute("mealList", MealsUtil.mealFactory());
-//        req.setAttribute("applicationName", "topjava");
+        req.setAttribute("mealList", MealsUtil.getFilteredWithExceeded(MealsUtil.mealFactory() , LocalTime.MIN, LocalTime.MAX,2000));
         req.getRequestDispatcher("meals.jsp").forward(req, resp);
     }
 }
