@@ -1,6 +1,10 @@
 package ru.javawebinar.topjava.util;
 
+import ru.javawebinar.topjava.model.Meal;
+
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * GKislin
