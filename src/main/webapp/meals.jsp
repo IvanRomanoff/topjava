@@ -16,19 +16,21 @@
     </tr>
 
     <c:forEach var="list" items="${requestScope.mealList}">
+        <c:set var="cleanedDateTime" value="${fn:replace(list.getDate(), 'T', ' ')}"/>
         <c:if test="${list.isExceed()}">
-           <div class="red_record">
+            <tr>
+                <td class="red_record"><c:out value="${cleanedDateTime}"/></td>
+                <td class="red_record"><c:out value="${list.getDescription()}"/></td>
+                <td class="red_record"><c:out value="${list.getCalories()}"/></td>
+            </tr>
         </c:if>
         <c:if test="${!list.isExceed()}">
-            <div class="blue_record">
-        </c:if>
                 <tr>
-                    <c:set var="cleanedDateTime" value="${fn:replace(list.getDate(), 'T', ' ')}"/>
-                    <td><c:out value="${cleanedDateTime}"/></td>
-                    <td><c:out value="${list.getDescription()}"/></td>
-                    <td><c:out value="${list.getCalories()}"/></td>
+                    <td class="blue_record"><c:out value="${cleanedDateTime}"/></td>
+                    <td class="blue_record"><c:out value="${list.getDescription()}"/></td>
+                    <td class="blue_record"><c:out value="${list.getCalories()}"/></td>
                 </tr>
-            </div>
+        </c:if>
     </c:forEach>
 </table>
 </body>
