@@ -15,6 +15,17 @@
         <th>Калории</th>
     </tr>
 
+    <form class = "form1" action="meals" method="post" >
+        <b>Введите порядковый номер для редактирования блюда:</b><br>
+            <%--<input type="text" name="ID" value = "new ID">--%>
+            <input type="text" name="Description" value = "new Description">
+            <input type="text" name="Date" value = "new Date">
+            <input type="text" name="Calories" value = "200">
+            <input type="submit" >
+    </form>
+
+    <br>
+
     <c:forEach var="list" items="${requestScope.mealList}">
         <c:set var="cleanedDateTime" value="${fn:replace(list.getDate(), 'T', ' ')}"/>
         <c:if test="${list.isExceed()}">
