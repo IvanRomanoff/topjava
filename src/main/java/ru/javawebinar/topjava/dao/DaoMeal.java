@@ -2,22 +2,22 @@ package ru.javawebinar.topjava.dao;
 
 import ru.javawebinar.topjava.model.Meal;
 
-import java.util.List;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * Created by Администратор on 28.03.2017.
  */
 public interface DaoMeal {
 
-    public void addMeal(Meal meal);
+    public void add(Meal meal);
 
-    public Meal getMealNyId(int num);
+    public Meal get(int id);
 
-    public void updateMeal(Meal meal, int id);
+    public void update(Meal meal);
 
-    public void removeMeal(int id);
+    public void remove(int id);
 
-    public void createNewMeals(List<Meal> list);
+    public void factoryMethod();
 
-    public List<Meal> getAllrecord();
+    public ConcurrentMap<Integer, Meal> getAllrecords();
 }

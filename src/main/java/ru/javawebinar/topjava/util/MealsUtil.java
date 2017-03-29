@@ -8,6 +8,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
 
 /**
@@ -15,57 +17,51 @@ import java.util.stream.Collectors;
  * 31.05.2015.
  */
 public class MealsUtil {
-//    public static void main(String[] args) {
-//        List<Meal> meals = Arrays.asList(
-//                new Meal(LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак", 500),
-//                new Meal(LocalDateTime.of(2015, Month.MAY, 30, 13, 0), "Обед", 1000),
-//                new Meal(LocalDateTime.of(2015, Month.MAY, 30, 20, 0), "Ужин", 500),
-//                new Meal(LocalDateTime.of(2015, Month.MAY, 31, 10, 0), "Завтрак", 1000),
-//                new Meal(LocalDateTime.of(2015, Month.MAY, 31, 13, 0), "Обед", 500),
-//                new Meal(LocalDateTime.of(2015, Month.MAY, 31, 20, 0), "Ужин", 510)
-//        );
-//        List<MealWithExceed> mealsWithExceeded = getFilteredWithExceeded(meals, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000);
-//        mealsWithExceeded.forEach(System.out::println);
-//
-//        System.out.println(getFilteredWithExceededByCycle(meals, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000));
-//    }
 
-    public static List<MealWithExceed> getFilteredWithExceeded(List<Meal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
-        Map<LocalDate, Integer> caloriesSumByDate = meals.stream()
-                .collect(
-                        Collectors.groupingBy(Meal::getDate, Collectors.summingInt(Meal::getCalories))
-//                      Collectors.toMap(Meal::getDate, Meal::getCalories, Integer::sum)
-                );
-
-        return meals.stream()
-                .filter(meal -> TimeUtil.isBetween(meal.getTime(), startTime, endTime))
-                .map(meal -> createWithExceed(meal, caloriesSumByDate.get(meal.getDate()) > caloriesPerDay))
-                .collect(Collectors.toList());
+    public static ConcurrentMap<Integer, Meal> mealFactory() {
+        List<Meal> list = Arrays.asList(
+                new Meal(LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак", 500),
+                new Meal(LocalDateTime.of(2015, Month.MAY, 30, 13, 0), "Обед", 1000),
+                new Meal(LocalDateTime.of(2015, Month.MAY, 30, 20, 0), "Ужин", 500),
+                new Meal(LocalDateTime.of(2015, Month.MAY, 31, 10, 0), "Завтрак", 1000),
+                new Meal(LocalDateTime.of(2015, Month.MAY, 31, 13, 0), "Обед", 500),
+                new Meal(LocalDateTime.of(2015, Month.MAY, 31, 20, 0), "Ужин", 510));
+        ConcurrentMap<Integer, Meal> result = new ConcurrentHashMap<>();
+        for (int i = 0; i < list.size(); i++) {
+            Meal curr = list.get(i);
+            curr.setId(i);
+            result.put(i, curr);
+        }
+        return result;
     }
 
-    public static List<MealWithExceed> getFilteredWithExceededByCycle(List<Meal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
+//    public static Map<Integer,MealWithExceed> getFilteredWithExceeded(List<Meal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
+//        Map<LocalDate, Integer> caloriesSumByDate = meals.stream()
+//                .collect(
+//                        Collectors.groupingBy(Meal::getDate, Collectors.summingInt(Meal::getCalories))
+////                      Collectors.toMap(Meal::getDate, Meal::getCalories, Integer::sum)
+//                );
+//
+//        return meals.stream()
+//                .filter(meal -> TimeUtil.isBetween(meal.getTime(), startTime, endTime))
+//                .map(meal -> createWithExceed(meal, caloriesSumByDate.get(meal.getDate()) > caloriesPerDay))
+//                .collect(Collectors.toMap( ));
+//    }
 
-        final Map<LocalDate, Integer> caloriesSumByDate = new HashMap<>();
-        meals.forEach(meal -> caloriesSumByDate.merge(meal.getDate(), meal.getCalories(), Integer::sum));
+    public static ConcurrentMap<Integer ,MealWithExceed> getFilteredWithExceededByCycle(ConcurrentMap<Integer ,Meal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
 
-        final List<MealWithExceed> mealsWithExceeded = new ArrayList<>();
-        meals.forEach(meal -> {
-            if (TimeUtil.isBetween(meal.getTime(), startTime, endTime)) {
-                mealsWithExceeded.add(createWithExceed(meal, caloriesSumByDate.get(meal.getDate()) > caloriesPerDay));
+        final ConcurrentMap<LocalDate, Integer> caloriesSumByDate = new ConcurrentHashMap<>();
+        meals.forEach( (key, val) -> caloriesSumByDate.merge(val.getDate(), val.getCalories(), Integer::sum));
+
+        final ConcurrentMap<Integer ,MealWithExceed> mealsWithExceeded = new ConcurrentHashMap<>();
+        meals.forEach((key, val) -> {
+            if (TimeUtil.isBetween(val.getTime(), startTime, endTime)) {
+                mealsWithExceeded.put(key, createWithExceed(val, caloriesSumByDate.get(val.getDate()) > caloriesPerDay));
             }
         });
         return mealsWithExceeded;
     }
 
-    public static List<Meal> mealFactory(){
-        return Arrays.asList(
-        new Meal(LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак", 500),
-        new Meal(LocalDateTime.of(2015, Month.MAY, 30, 13, 0), "Обед", 1000),
-        new Meal(LocalDateTime.of(2015, Month.MAY, 30, 20, 0), "Ужин", 500),
-        new Meal(LocalDateTime.of(2015, Month.MAY, 31, 10, 0), "Завтрак", 1000),
-        new Meal(LocalDateTime.of(2015, Month.MAY, 31, 13, 0), "Обед", 500),
-        new Meal(LocalDateTime.of(2015, Month.MAY, 31, 20, 0), "Ужин", 510));
-    }
 
     public static MealWithExceed createWithExceed(Meal meal, boolean exceeded) {
         return new MealWithExceed(meal.getDateTime(), meal.getDescription(), meal.getCalories(), meal.getId(), exceeded);

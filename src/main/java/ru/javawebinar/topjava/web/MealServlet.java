@@ -3,7 +3,6 @@ package ru.javawebinar.topjava.web;
 import org.slf4j.Logger;
 import ru.javawebinar.topjava.dao.DaoMeal;
 import ru.javawebinar.topjava.dao.DaoMealMemoryImplementation;
-import ru.javawebinar.topjava.dao.MealService;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.MealsUtil;
 
@@ -22,31 +21,40 @@ import static org.slf4j.LoggerFactory.getLogger;
  */
 public class MealServlet extends HttpServlet {
     private static final Logger LOG = getLogger(MealServlet.class);
-    MealService mealService;
+    DaoMeal myDao;
 
     @Override
     public void init() throws ServletException {
-        DaoMeal myDao = new DaoMealMemoryImplementation();
-        myDao.createNewMeals(MealsUtil.mealFactory());
-        this.mealService = new MealService(myDao);
+        myDao = new DaoMealMemoryImplementation();
+        myDao.factoryMethod();
+
     }
 
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         LOG.debug("MealServlet doGet");
-        req.setAttribute("mealList", MealsUtil.getFilteredWithExceeded(mealService.getMeallist(), LocalTime.MIN, LocalTime.MAX, 2000));
+        req.setAttribute("mealMap", MealsUtil.getFilteredWithExceededByCycle(myDao.getAllrecords(), LocalTime.MIN, LocalTime.MAX, 2000));
+        req.setAttribute("myDao", myDao);
         req.getRequestDispatcher("meals.jsp").forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         LOG.debug("doPost");
-        req.setAttribute("mealList", MealsUtil.getFilteredWithExceeded(mealService.getMeallist(), LocalTime.MIN, LocalTime.MAX, 2000));
-//        LocalDateTime localDateTime = new LocalDateTime(); //
+
         int calories = Integer.valueOf(req.getParameter("Calories"));
         String description = String.valueOf(req.getParameter("Description"));
-        mealService.addMeal(new Meal(LocalDateTime.now()/*спешил*/, description, calories));
+        if (calories > 0 && !description.isEmpty()){
+            myDao.add(new Meal(LocalDateTime.now()/*спешил*/, description, calories));
+        }
+        req.setAttribute("myDao", myDao);
+        req.setAttribute("mealMap", MealsUtil.getFilteredWithExceededByCycle(myDao.getAllrecords(), LocalTime.MIN, LocalTime.MAX, 2000));
         req.getRequestDispatcher("meals.jsp").forward(req, resp);
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
     }
 }

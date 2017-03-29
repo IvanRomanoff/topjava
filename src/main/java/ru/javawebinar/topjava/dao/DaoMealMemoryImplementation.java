@@ -1,51 +1,48 @@
 package ru.javawebinar.topjava.dao;
 
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.util.MealsUtil;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by Администратор on 28.03.2017.
  */
 public class DaoMealMemoryImplementation implements DaoMeal {
-    List<Meal> mealsList = new ArrayList<>();
+    static AtomicInteger id;
+    ConcurrentMap<Integer,Meal> map = new ConcurrentHashMap<>();
+
 
     @Override
-    public void addMeal(Meal meal) {
-        try {
-            Meal old = mealsList.get(meal.getId());
-        } catch (IndexOutOfBoundsException e) {
-            mealsList.add(meal);
-        }
+    public void add(Meal meal) {
+            map.put(id.incrementAndGet() , meal);
     }
 
     @Override
-    public Meal getMealNyId(int num) {
-        return mealsList.get(num);
+    public Meal get(int id) {
+        return map.get(id);
     }
 
     @Override
-    public void updateMeal(Meal meal, int id) {
-        try {
-            Meal old = mealsList.get(id);
-        } catch (IndexOutOfBoundsException e) {
-            addMeal(meal);
-        }
+    public void update(Meal meal) {
+        map.put(meal.getId() , meal);
     }
 
     @Override
-    public void removeMeal(int id) {
-        this.mealsList.remove(id);
+    public void remove(int id) {
+        this.map.remove(id);
     }
 
     @Override
-    public void createNewMeals(List<Meal> list) {
-        this.mealsList = list;
+    public void factoryMethod() {
+        this.map = MealsUtil.mealFactory();
+         id = new AtomicInteger(map.size() > 0 ? map.size()-1 : 0); //put value in counter. For first -1
     }
 
     @Override
-    public List<Meal> getAllrecord() {
-        return mealsList;
+    public ConcurrentMap<Integer, Meal> getAllrecords() {
+        return map;
     }
 }
