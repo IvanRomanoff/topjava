@@ -10,6 +10,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+import static java.util.Collections.EMPTY_LIST;
+
 /**
  * GKislin
  * 15.09.2015.
@@ -43,10 +45,11 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
 
     @Override
     public Meal get(int id, int userID) {
-        if (repository.get(id).getUserID() == userID) {
-            return repository.get(id);
+        Meal chekedMeal = repository.get(id);
+        if (chekedMeal.getUserID() == userID) {
+            return chekedMeal;
         } else {
-            return null;
+            return new Meal();
         }
     }
 
@@ -57,6 +60,6 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
                             .collect(Collectors.toList());
 
          meallist.sort((o1, o2) -> o2.getDateTime().compareTo(o1.getDateTime()));
-        return meallist;
+        return meallist.isEmpty()? Collections.EMPTY_LIST : meallist;
     }
 }

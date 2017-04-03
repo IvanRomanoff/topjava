@@ -31,6 +31,10 @@ public class Meal {
 //        this.userID = userID;
     }
 
+    public Meal() {
+
+    }
+
     public Integer getId() {
         return id;
     }

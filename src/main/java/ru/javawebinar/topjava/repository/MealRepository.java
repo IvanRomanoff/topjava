@@ -1,9 +1,8 @@
 package ru.javawebinar.topjava.repository;
 
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.model.User;
 
-import java.util.Collection;
+import java.util.List;
 
 /**
  * GKislin
@@ -16,5 +15,5 @@ public interface MealRepository {
 
     Meal get(int id, int userID);
 
-    Collection<Meal> getAll(int userID);
+    List getAll(int userID);
 }
