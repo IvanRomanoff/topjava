@@ -49,7 +49,7 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
         if (chekedMeal.getUserID() == userID) {
             return chekedMeal;
         } else {
-            return new Meal();
+            return null;
         }
     }
 
