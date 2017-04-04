@@ -8,26 +8,22 @@ import ru.javawebinar.topjava.service.MealService;
 import java.util.Collection;
 
 @Controller
-public class MealRestController implements MealService{
+public class MealRestController {
     @Autowired
     private MealService service;
-
-    @Override
+    
     public Meal save(Meal meal, int userID) {
         return service.save(meal,userID);
     }
 
-    @Override
     public void delete(int id, int userID) {
         service.delete(id,userID);
     }
 
-    @Override
     public Meal get(int id, int userID) {
         return service.get(id,userID);
     }
 
-    @Override
     public Collection<Meal> getAll(int userID) {
         return service.getAll(userID);
     }

@@ -27,7 +27,6 @@ public class Meal extends NamedEntity{
 //        this.userID = userID;
     }
 
-
     public int getUserID() {
         return userID;
     }

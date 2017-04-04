@@ -5,6 +5,7 @@ import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
 

@@ -7,6 +7,7 @@ import ru.javawebinar.topjava.repository.UserRepository;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.util.List;
+import java.util.Optional;
 
 import static ru.javawebinar.topjava.util.ValidationUtil.checkNotFound;
 import static ru.javawebinar.topjava.util.ValidationUtil.checkNotFoundWithId;
