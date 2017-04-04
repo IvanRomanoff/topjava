@@ -39,7 +39,7 @@
                         <%--<%=TimeUtil.toString(meal.getDateTime())%>--%>
                         ${fn:formatDateTime(meal.dateTime)}
                 </td>
-                <td>${meal.description}</td>
+                <td>${meal.name}</td>
                 <td>${meal.calories}</td>
                 <td><a href="meals?action=update&id=${meal.id}">Update</a></td>
                 <td><a href="meals?action=delete&id=${meal.id}">Delete</a></td>

@@ -1,7 +1,7 @@
 package ru.javawebinar.topjava.model;
 
 public class BaseEntity {
-    protected Integer id;
+    protected volatile Integer id;
 
     public BaseEntity() {
     }

@@ -8,36 +8,25 @@ import java.time.LocalTime;
  * GKislin
  * 11.01.2015.
  */
-public class Meal {
-    private volatile Integer id;
-
+public class Meal extends NamedEntity{
     private final LocalDateTime dateTime;
-
-    private final String description;
 
     private final int calories;
 
     private volatile int userID;
 
-    public Meal(LocalDateTime dateTime, String description, int calories/*, int userID*/) {
-        this(null, dateTime, description, calories/*, userID*/);
+    public Meal(LocalDateTime dateTime, String name, int calories/*, int userID*/) {
+        this(null, dateTime, name, calories/*, userID*/);
     }
 
-    public Meal(Integer id, LocalDateTime dateTime, String description, int calories/*, int userID*/) {
+    public Meal(Integer id, LocalDateTime dateTime, String name, int calories/*, int userID*/) {
         this.id = id;
         this.dateTime = dateTime;
-        this.description = description;
+        this.name = name;
         this.calories = calories;
 //        this.userID = userID;
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public int getUserID() {
         return userID;
@@ -49,11 +38,6 @@ public class Meal {
 
     public LocalDateTime getDateTime() {
         return dateTime;
-    }
-
-
-    public String getDescription() {
-        return description;
     }
 
     public int getCalories() {
@@ -68,16 +52,12 @@ public class Meal {
         return dateTime.toLocalTime();
     }
 
-    public boolean isNew() {
-        return id == null;
-    }
-
     @Override
     public String toString() {
         return "Meal{" +
                 "id=" + id +
                 ", dateTime=" + dateTime +
-                ", description='" + description + '\'' +
+                ", name='" + name + '\'' +
                 ", calories=" + calories +
                 '}';
     }
