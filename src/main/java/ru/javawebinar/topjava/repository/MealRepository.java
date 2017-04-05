@@ -15,5 +15,5 @@ public interface MealRepository {
 
     Meal get(int id, int userID);
 
-    List getAll(int userID);
+    List<Meal> getAll(int userID);
 }
