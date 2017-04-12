@@ -39,29 +39,30 @@ public class JdbcMealRepositoryImpl implements MealRepository {
 
     @Override
     public Meal save(Meal meal, int userId) {
+
         MapSqlParameterSource map = new MapSqlParameterSource()
                 .addValue("id", meal.getId())
                 .addValue("dateTime", meal.getDateTime())
                 .addValue("description", meal.getDescription())
                 .addValue("calories", meal.getCalories())
-                .addValue("userId", AuthorizedUser.id());
+                .addValue("userId", userId);
 
-        if (meal.isNew()){
+
+        if (meal.isNew()) {
             Number newKey = insertMeal.executeAndReturnKey(map);
             meal.setId(newKey.intValue());
-        }else{
+        } else {
             namedParameterJdbcTemplate.update(
                     "UPDATE meals SET dateTime=:dateTime, description=:description, calories=:calories " +
-                            "where  id=:id", map
+                            "where  id=:id and userId=:userId", map
             );
         }
-
         return meal;
     }
 
     @Override
     public boolean delete(int id, int userId) {
-        return jdbcTemplate.update("DELETE FROM meals WHERE id=? and userId = ? ", id , AuthorizedUser.id()) != 0;
+        return jdbcTemplate.update("DELETE FROM meals WHERE id=? and userId = ? ", id, userId) != 0;
     }
 
     @Override
@@ -77,15 +78,10 @@ public class JdbcMealRepositoryImpl implements MealRepository {
 
     @Override
     public List<Meal> getBetween(LocalDateTime startDate, LocalDateTime endDate, int userId) {
-        List<Meal> list = getAll(userId);
-        Iterator<Meal> iterator = list.iterator();
-        while(iterator.hasNext()){
-            Meal current = iterator.next();
-            //Make remove if not applicable
-            if (!DateTimeUtil.isBetween(current.getDateTime(), startDate , endDate)){
-                iterator.remove();
-            }
-        }
-        return list;
+
+        return jdbcTemplate.query("SELECT * FROM meals WHERE userId = ? " +
+                "and dateTime >= ? " +
+                "and dateTime <= ? ORDER BY  dateTime DESC",
+                ROW_MAPPER, userId, startDate , endDate);
     }
 }

@@ -13,14 +13,16 @@ INSERT INTO user_roles (role, user_id) VALUES
   ('ROLE_USER', 100000),
   ('ROLE_ADMIN', 100001);
 
+SELECT id from users WHERE name = 'User' and email = 'user@yandex.ru';
+
 INSERT INTO meals (dateTime, description, calories, userId) VALUES
-  (TIMESTAMP 'yesterday', 'Катлетос', 800 , (SELECT id from users WHERE name = 'User' and email = 'user@yandex.ru')),
-  (TIMESTAMP 'yesterday', 'Сасисон', 800 ,  (SELECT id from users WHERE name = 'User' and email = 'user@yandex.ru')),
-  (now(), 'Катлетос', 800 , (SELECT id from users WHERE name = 'User' and email = 'user@yandex.ru')),
-  (now(), 'Сасисон', 800 ,  (SELECT id from users WHERE name = 'User' and email = 'user@yandex.ru')),
-  (now(), 'Кекс', 800 ,     (SELECT id from users WHERE name = 'User' and email = 'user@yandex.ru')),
-  (now(), 'Катлетос', 800 , (SELECT id from users WHERE name = 'Admin' and email = 'admin@gmail.com')),
-  (now(), 'Сасисон', 800 ,  (SELECT id from users WHERE name = 'Admin' and email = 'admin@gmail.com')),
-  (now(), 'Кекс', 800 ,     (SELECT id from users WHERE name = 'Admin' and email = 'admin@gmail.com')),
-  (TIMESTAMP 'yesterday', 'Катлетос', 800 , (SELECT id from users WHERE name = 'Admin' and email = 'admin@gmail.com')),
-  (TIMESTAMP 'yesterday', 'Сасисон', 800 ,  (SELECT id from users WHERE name = 'Admin' and email = 'admin@gmail.com'));
+  (TIMESTAMP 'yesterday', 'Катлетос', 800 , 100000),
+  (TIMESTAMP 'yesterday', 'Сасисон', 800 ,  100000),
+  (now(), 'Катлетос', 800 , 100000),
+  (now(), 'Сасисон', 800 ,  100000),
+  (now(), 'Кекс', 800 ,     100000),
+  (now(), 'Сасисон', 800 ,  100001),
+  (now(), 'Катлетос', 800 , 100001),
+  (now(), 'Кекс', 800 ,     100001),
+  (TIMESTAMP 'yesterday', 'Катлетос', 800 , 100001),
+  (TIMESTAMP 'yesterday', 'Сасисон', 800 ,  100001);
