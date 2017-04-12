@@ -18,11 +18,11 @@ SELECT id from users WHERE name = 'User' and email = 'user@yandex.ru';
 INSERT INTO meals (dateTime, description, calories, userId) VALUES
   (TIMESTAMP 'yesterday', 'Катлетос', 800 , 100000),
   (TIMESTAMP 'yesterday', 'Сасисон', 800 ,  100000),
-  (now(), 'Катлетос', 800 , 100000),
-  (now(), 'Сасисон', 800 ,  100000),
+  (now()+ interval '1 hour', 'Катлетос', 800 , 100000),
+  (now()+ interval '1 minute', 'Сасисон', 800 ,  100000),
   (now(), 'Кекс', 800 ,     100000),
   (now(), 'Сасисон', 800 ,  100001),
-  (now(), 'Катлетос', 800 , 100001),
-  (now(), 'Кекс', 800 ,     100001),
+  (now()+ interval '1 hour', 'Катлетос', 800 , 100001),
+  (now()+ interval '1 minute', 'Кекс', 800 ,     100001),
   (TIMESTAMP 'yesterday', 'Катлетос', 800 , 100001),
   (TIMESTAMP 'yesterday', 'Сасисон', 800 ,  100001);
