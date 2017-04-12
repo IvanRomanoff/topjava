@@ -21,6 +21,11 @@
     </appender>
 
     <logger name="ru.javawebinar.topjava" level="debug"/>
+    <!--<logger name="org.springframework.beans" level="debug"/>-->
+
+    <!--<category name="org.springframework.beans">-->
+        <!--<priority value="debug" />-->
+    <!--</category>-->
 
     <root level="info">
         <appender-ref ref="file"/>

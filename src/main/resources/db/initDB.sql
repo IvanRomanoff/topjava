@@ -31,6 +31,6 @@ CREATE TABLE meals
   dateTime          TIMESTAMP NOT NULL,
   description       VARCHAR NOT NULL,
   calories          INTEGER NOT NULL,
-  userId            INTEGER REFERENCES users(id)
+  userId            INTEGER REFERENCES users(id) ON DELETE CASCADE
 );
 
