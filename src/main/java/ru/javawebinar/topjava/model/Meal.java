@@ -1,7 +1,8 @@
 package ru.javawebinar.topjava.model;
 
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
+import org.hibernate.validator.constraints.NotBlank;
+
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -10,14 +11,33 @@ import java.time.LocalTime;
  * GKislin
  * 11.01.2015.
  */
+@NamedQueries({
+        @NamedQuery(name = Meal.GET_ALL, query = "SELECT m FROM Meal m WHERE m.user.id =?1"),
+        @NamedQuery(name = Meal.GET_BETWEEN, query = "SELECT m FROM Meal m WHERE m.user.id =?1 and m.dateTime >= ?2 and m.dateTime <= ?3 order by m.dateTime desc"),
+})
+
+@Entity
+@Table(name = "meals")
 public class Meal extends BaseEntity {
+
+    public static final String GET_ALL = "Meal.getAll";
+    public static final String GET_BETWEEN = "Meal.getAllSorted";
+
+    @Column(name = "date_time")
+    @NotBlank
     private LocalDateTime dateTime;
 
+    @Column(name = "description" , nullable = false)
+    @NotBlank
     private String description;
 
+    @Column(name = "calories", nullable = false)
+    @NotBlank
     private int calories;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @NotBlank
+    @JoinColumn(name="user_id", nullable = false)
     private User user;
 
     public Meal() {
